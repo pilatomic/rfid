@@ -1659,6 +1659,26 @@ bool MFRC522::PICC_IsNewCardPresent() {
 } // End PICC_IsNewCardPresent()
 
 /**
+ * Returns true if a PICC responds to PICC_CMD_REQA.
+ * Only "new" cards in state IDLE are invited. Sleeping cards in state HALT are ignored.
+ *
+ * @return bool
+ */
+bool MFRC522::PICC_IsCardPresent() {
+        byte bufferATQA[2];
+        byte bufferSize = sizeof(bufferATQA);
+
+        // Reset baud rates
+        PCD_WriteRegister(TxModeReg, 0x00);
+        PCD_WriteRegister(RxModeReg, 0x00);
+        // Reset ModWidthReg
+        PCD_WriteRegister(ModWidthReg, 0x26);
+
+        MFRC522::StatusCode result = PICC_WakeupA(bufferATQA, &bufferSize);
+        return (result == STATUS_OK || result == STATUS_COLLISION);
+} // End PICC_IsCardPresent()
+
+/**
  * Simple wrapper around PICC_Select.
  * Returns true if a UID could be read.
  * Remember to call PICC_IsNewCardPresent(), PICC_RequestA() or PICC_WakeupA() first.
