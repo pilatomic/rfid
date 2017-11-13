@@ -12,6 +12,14 @@
 // Functions for setting up the Arduino
 /////////////////////////////////////////////////////////////////////////////////////
 
+void MFRC522::Init_Pins()
+{
+    pinMode(_resetPowerDownPin, OUTPUT);
+    digitalWrite(_resetPowerDownPin, LOW);
+
+    pinMode(_chipSelectPin, OUTPUT);
+    digitalWrite(_chipSelectPin, HIGH);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Basic interface functions for communicating with the MFRC522
@@ -21,6 +29,7 @@
  * Writes a byte to the specified register in the MFRC522 chip.
  * The interface is described in the datasheet section 8.1.2.
  */
+
 void MFRC522::PCD_WriteRegister(	PCD_Register reg,	///< The register to write to. One of the PCD_Register enums.
 									byte value			///< The value to write.
 								) {
